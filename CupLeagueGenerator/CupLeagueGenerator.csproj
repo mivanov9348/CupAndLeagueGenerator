@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Cup\" />
     <Folder Include="Views\League\" />
   </ItemGroup>
 

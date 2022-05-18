@@ -7,5 +7,10 @@ namespace CupLeagueGenerator.Controllers
         public CupController()
         {
         }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
     }
 }
