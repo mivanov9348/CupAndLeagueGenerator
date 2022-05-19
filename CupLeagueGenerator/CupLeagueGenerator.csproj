@@ -20,8 +20,4 @@
     <ProjectReference Include="..\CupLeagueGenerator.Infrastructure\CupLeagueGenerator.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\League\" />
-  </ItemGroup>
-
 </Project>

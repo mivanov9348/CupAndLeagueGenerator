@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers;
 @model CupModel
 
+
 <head>
     <link rel="stylesheet" href="~/css/cupIndex.css" />
 </head>
@@ -17,24 +18,27 @@
 
         <div class="form-group">
             <label for="exampleFormControlInput1">Cup Name</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1">
+            <input asp-for="@Model.CupName" type="text" class="form-control" id="exampleFormControlInput1" required="true">
         </div>
 
         <div class="form-group">
-            <label for="exampleFormControlSelect1">Example select</label>
-            <select asp-for="Matches" class="form-control" id="exampleFormControlSelect1">
-                <option>4</option>
-                <option>8</option>
-                <option>16</option>
-                <option>32</option>
-                <option>64</option>
+            <label for="exampleFormControlSelect1">Teams</label>
+            <select asp-for="@Model.CupParticipants" class="form-control" id="exampleFormControlSelect1">
+                <option value="4">4</option>
+                <option value="8">8</option>
+                <option value="16">16</option>
+                <option value="32">32</option>
+                <option value="64">64</option>
             </select>
         </div>
-
+        <hr style="margin-left:130px" />
         <div class="form-group">
-            <input class="Button" type="submit" value="Create" />
+            <input class="Button" asp-controller="Cup" asp-action="TeamsInput" type="submit" value="Next" />
         </div>
 
     </form>
 
+
+
 </body>
+

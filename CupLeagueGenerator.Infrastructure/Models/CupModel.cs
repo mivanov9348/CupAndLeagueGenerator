@@ -1,15 +1,17 @@
 ﻿namespace CupLeagueGenerator.Infrastructure.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using CupLeagueGenerator.Infrastructure.Data.DataModels;
+    using System.ComponentModel.DataAnnotations;
     public class CupModel
     {
+        [Required]
+        [MinLength(3, ErrorMessage = "Minimum characters must be 3!")]
+        [MaxLength(20, ErrorMessage = "Maximum characters must be 3!")]
         public string CupName { get; set; }
         public int CupParticipants { get; set; }
         public int Matches { get; set; }
+        public List<string> Teams { get; set; }
 
+        public List<Fixture> Fixtures { get; set; }
     }
 }

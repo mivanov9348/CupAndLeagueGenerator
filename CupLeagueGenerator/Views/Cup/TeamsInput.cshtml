@@ -1,0 +1,34 @@
+﻿@using CupLeagueGenerator.Infrastructure.Models
+@using Microsoft.AspNetCore.Mvc.TagHelpers;
+@model CupModel
+
+<head>
+    <link rel="stylesheet" href="~/css/cupIndex.css" />
+</head>
+
+<body>
+
+    <form class="form" method="post">
+
+        <div class="title">
+            <label>@Model.CupName</label>
+            <hr style="color:black" />
+        </div>
+
+        @for (var i = 1; i <= @Model.CupParticipants; i++)
+        {
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Team @i</label>
+                <input asp-for="@Model.Teams" type="text" class="form-control" required="true" id="exampleFormControlInput1">
+            </div>
+        }
+
+        <hr style="margin-left:130px" />
+        <div class="form-group">
+            <input type="hidden" asp-for="@Model.CupName" />
+            <input type="hidden" asp-for="@Model.CupParticipants" />
+            <input class="Button" asp-controller="Cup" asp-action="CupFixtures" type="submit" value="Create" />
+        </div>
+
+    </form>
+</body>

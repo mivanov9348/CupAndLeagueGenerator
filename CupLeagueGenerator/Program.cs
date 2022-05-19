@@ -1,3 +1,4 @@
+using CupLeagueGenerator.Core.Services.Cup;
 using CupLeagueGenerator.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<CupLeagueDbContext>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<ICupService, CupService>();
 
 var app = builder.Build();
 
