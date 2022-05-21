@@ -1,4 +1,5 @@
 using CupLeagueGenerator.Core.Services.Cup;
+using CupLeagueGenerator.Core.Services.League;
 using CupLeagueGenerator.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<ICupService, CupService>();
+builder.Services.AddScoped<ILeagueServices, LeagueService>();
 
 var app = builder.Build();
 
