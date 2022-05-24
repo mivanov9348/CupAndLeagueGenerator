@@ -2,6 +2,10 @@
     background-color: grey;
 }
 
+.groups {
+    display: grid;
+}
+
 .table-dark {
     border: 1px solid white;
     text-align: center;

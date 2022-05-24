@@ -28,5 +28,14 @@
 
             return View(model);
         }
+
+        public IActionResult LeagueFixtures(LeagueModel model)
+        {
+            model.Groups = leagueService.GenerateGroups(model);
+            model.Groups = leagueService.FillTeamsInGroups(model);
+            model.Fixtures = leagueService.GetFixtures(model);
+
+            return View(model);
+        }
     }
 }

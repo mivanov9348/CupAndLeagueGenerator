@@ -27,7 +27,8 @@
         <div class="form-group">
             <input type="hidden" asp-for="@Model.LeagueName" />
             <input type="hidden" asp-for="@Model.NumberOfTeams" />
-            <input class="Button" asp-controller="Cup" asp-action="CupFixtures" type="submit" value="Create" />
+            <input type="hidden" asp-for="@Model.TeamsPerGroup" />
+            <input class="Button" asp-controller="League" asp-action="LeagueFixtures" type="submit" value="Create" />
         </div>
 
     </form>

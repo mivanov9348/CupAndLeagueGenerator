@@ -3,7 +3,6 @@
     public class Fixture
     {
         public int Id { get; set; }
-
         public int Round { get; set; }
         public string HomeTeam { get; set; }
         public int HomeTeamGoals { get; set; }
