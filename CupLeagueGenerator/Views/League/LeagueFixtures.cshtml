@@ -2,7 +2,6 @@
 @model LeagueModel
 
 @{
-    var groupCount = 0;
     var fixturesCount = 0;
 }
 
@@ -15,39 +14,41 @@
     <div class="groups">
         @foreach (var group in @Model.Groups)
         {
-            groupCount = 0;
-            <table class="table table-bordered table-dark">
+
+            <table class="table table-bordered table-dark" style="width:900px">
                 <thead>
-                    <tr style="text-align:center;color:red;">
-                        <th colspan=2> @group.Name  </th>
+                    <tr style="text-align:center;color:black;font-weight:bolder">
+                        <th colspan=5 style="background-color:grey"> Group @group.Name  </th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var team in @group.Teams)
                     {
-                        groupCount++;
                         <tr>
-                            <th style="width:10%" scope="row">@groupCount</th>
-                            <td>@team</td>
+                            <td colspan=5>@team</td>
                         </tr>
                     }
 
                 </tbody>
-            </table>
-            fixturesCount = 0;
-            <table class="table table-bordered table-dark">
+
                 <thead>
-                    <tr style="text-align:center;color:red;">
-                        <th colspan=3> Fixtures @group.Name  </th>
+                    <tr style="text-align:center;color:black;font-weight:bolder;">
+                        <th colspan=5 style="background-color:grey"> Fixtures  </th>
                     </tr>
                 </thead>
                 <tbody>
+                    @if (fixturesCount > 0)
+                    {
+                        fixturesCount = 0;
+                    }
                     @foreach (var team in @group.Fixtures)
                     {
-                        fixturesCount   ++;
-                        <tr>    
+                        fixturesCount++;
+                        <tr>
                             <th style="width:10%" scope="row">@fixturesCount</th>
                             <td>@team.HomeTeam</td>
+                            <td>@team.HomeTeamGoals</td>
+                            <td>@team.AwayTeamGoals</td>
                             <td>@team.AwayTeam</td>
                         </tr>
                     }
