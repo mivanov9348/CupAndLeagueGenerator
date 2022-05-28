@@ -9,3 +9,12 @@
     margin-top: 5%;
     width: 700px
 }
+
+.AddMinBtn {
+    margin-left: 5px;
+    margin-right: 5px;
+    height: 30px;
+    font-weight: bolder;
+    background-color: grey;
+    color: white;
+}

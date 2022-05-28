@@ -3,6 +3,7 @@
     using CupLeagueGenerator.Core.Services.Cup;
     using CupLeagueGenerator.Infrastructure.Models;
     using Microsoft.AspNetCore.Mvc;
+    using System.Security.Claims;
     public class CupController : Controller
     {
         private readonly ICupService cupService;
@@ -12,20 +13,39 @@
         }
         public IActionResult Index()
         {
-            return View();
+            var userId = GetUserId();
+            var userCups = cupService.GetUserCups(userId);
+            return View(new CupModel
+            {
+                UserCups = userCups
+            });
         }
-
         public IActionResult TeamsInput(CupModel model)
         {
             return View(model);
         }
         public IActionResult CupFixtures(CupModel model)
         {
-            var fixtures = cupService.GenerateCupFixtures(model);
+            var userId = GetUserId();
+            var fixtures = cupService.GenerateCupFixtures(model, userId);
             model.Matches = fixtures.Count();
             model.Fixtures = fixtures;
 
             return View(model);
+        }
+        public IActionResult LoadCup(int id)
+        {
+            var currentCup = cupService.GetCurrentCup(id);
+            var fixtures = cupService.GetCupFixtures(currentCup);
+            return View("CupFixtures", new CupModel
+            {
+                CupName = currentCup.Name,
+                Fixtures = fixtures
+            });
+        }
+        private string GetUserId()
+        {
+            return User.FindFirst(ClaimTypes.NameIdentifier).Value;
         }
     }
 }

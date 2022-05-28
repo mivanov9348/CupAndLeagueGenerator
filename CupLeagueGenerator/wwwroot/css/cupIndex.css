@@ -1,9 +1,10 @@
 ﻿body {
-    background-color: grey; 
+    background-color: grey;
 }
 
 .title {
     margin-left: 25%;
+    margin-top: -100px;
 }
 
 .form {
@@ -16,12 +17,11 @@
 }
 
 .form-group {
-    
     margin-left: 25%;
 }
 
 input {
-    text-align: center;    
+    text-align: center;
 }
 
 .Button {
@@ -36,3 +36,8 @@ input {
         background-color: gray;
         color: black;
     }
+
+table, th, td {
+    border: 1px solid;
+    margin-left: -450px;
+}

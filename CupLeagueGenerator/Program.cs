@@ -1,10 +1,12 @@
 using CupLeagueGenerator.Core.Services.Cup;
 using CupLeagueGenerator.Core.Services.League;
 using CupLeagueGenerator.Data;
+using CupLeagueGenerator.Infrastructure.Data.DataModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -12,12 +14,20 @@ builder.Services.AddDbContext<CupLeagueDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<CupLeagueDbContext>();
-builder.Services.AddControllersWithViews();
-
 builder.Services.AddScoped<ICupService, CupService>();
 builder.Services.AddScoped<ILeagueServices, LeagueService>();
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(o =>
+{
+    o.SignIn.RequireConfirmedAccount = true;
+    o.Password.RequireDigit = false;
+    o.Password.RequireLowercase = false;
+    o.Password.RequireUppercase = false;
+    o.Password.RequireNonAlphanumeric = false;
+    o.Password.RequiredLength = 6;
+})
+.AddEntityFrameworkStores<CupLeagueDbContext>()
+.AddDefaultTokenProviders();
 
 var app = builder.Build();
 

@@ -10,25 +10,31 @@
 </head>
 
 <body>
-    <table class="table table-bordered table-dark">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Home Team</th>
-                <th scope="col">Away Team</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var fixture in @Model.Fixtures)
-            {
-                count++;
+    <form method="get">
+        <table class="table table-bordered table-dark">
+            <thead>
                 <tr>
-                    <th scope="row">@count</th>
-                    <td>@fixture.HomeTeam</td>
-                    <td>@fixture.AwayTeam</td>
+                    <th scope="col">#</th>
+                    <th scope="col">Home Team</th>
+                    <th scope="col" colspan=2>Result</th>
+                    <th scope="col">Away Team</th>
                 </tr>
-            }
-
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var fixture in @Model.Fixtures)
+                {
+                    count++;
+                    <tr>
+                        <th scope="row">@count</th>
+                        <td>@fixture.HomeTeam</td>
+                        <td>@fixture.HomeTeamGoals</td>
+                        <td>@fixture.AwayTeamGoals</td>
+                        <td>@fixture.AwayTeam</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <input type="hidden" asp-for="@Model.Teams" />
+        <input type="hidden" asp-for="@Model.CupName" />
+    </form>
 </body>

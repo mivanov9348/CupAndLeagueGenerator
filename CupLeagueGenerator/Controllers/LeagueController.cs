@@ -3,6 +3,8 @@
     using CupLeagueGenerator.Core.Services.League;
     using CupLeagueGenerator.Infrastructure.Models;
     using Microsoft.AspNetCore.Mvc;
+    using System.Security.Claims;
+
     public class LeagueController : Controller
     {
         private readonly ILeagueServices leagueService;
@@ -10,12 +12,10 @@
         {
             this.leagueService = leagueService;
         }
-
         public IActionResult Index()
         {
             return View();
         }
-
         public IActionResult TeamsInput(LeagueModel model)
         {
             (string, bool) IsTeamsValid = leagueService.IsTeamsValid(model);
@@ -31,11 +31,18 @@
 
         public IActionResult LeagueFixtures(LeagueModel model)
         {
-            model.Groups = leagueService.GenerateGroups(model);
-            model.Groups = leagueService.FillTeamsInGroups(model);
-            model.Fixtures = leagueService.GetFixtures(model);
+            var userId = GetUserId();
+            model.Id = leagueService.CreateLeague(model,userId).Id;
+            model.Groups = leagueService.GenerateGroups(model, userId);
+            model.Groups = leagueService.FillTeamsInGroups(model, userId);
+            model.Fixtures = leagueService.GetFixtures(model, userId);
 
-            return View(model);
+            return View("LeagueFixtures", model);
+        }
+
+        private string GetUserId()
+        {
+            return User.FindFirst(ClaimTypes.NameIdentifier).Value;
         }
     }
 }

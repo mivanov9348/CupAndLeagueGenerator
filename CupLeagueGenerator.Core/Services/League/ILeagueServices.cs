@@ -5,9 +5,10 @@
     public interface ILeagueServices
     {
         (string, bool) IsTeamsValid(LeagueModel model);
-              
-        List<Group> GenerateGroups(LeagueModel model);
-        List<Group> FillTeamsInGroups(LeagueModel model);
-        List<Fixture> GetFixtures(LeagueModel model);
+
+        League CreateLeague(LeagueModel model,string userId);
+        List<Group> GenerateGroups(LeagueModel model, string userId);
+        List<Group> FillTeamsInGroups(LeagueModel model, string userId);
+        List<Fixture> GetFixtures(LeagueModel model, string userId);
     }
 }

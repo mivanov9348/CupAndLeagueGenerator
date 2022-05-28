@@ -18,14 +18,14 @@
             <table class="table table-bordered table-dark" style="width:900px">
                 <thead>
                     <tr style="text-align:center;color:black;font-weight:bolder">
-                        <th colspan=5 style="background-color:grey"> Group @group.Name  </th>
+                        <th colspan=5 style="background-color:lightblue"> Group @group.Name  </th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var team in @group.Teams)
                     {
                         <tr>
-                            <td colspan=5>@team</td>
+                            <td colspan=5>@team.Name</td>
                         </tr>
                     }
 
@@ -33,7 +33,7 @@
 
                 <thead>
                     <tr style="text-align:center;color:black;font-weight:bolder;">
-                        <th colspan=5 style="background-color:grey"> Fixtures  </th>
+                        <th colspan=5 style="background-color:white"> Fixtures  </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,10 +55,11 @@
 
                 </tbody>
             </table>
-            <hr />
+            <hr style="color:red;font-weight:bolder" />
         }
     </div>
 
 
 
 </body>
+
