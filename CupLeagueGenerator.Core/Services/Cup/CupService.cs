@@ -28,7 +28,8 @@
             var newCup = new Cup
             {
                 Name = model.CupName,
-                AppUserId = userId
+                AppUserId = userId,
+                TeamsCount = teams.Count
             };
 
             this.data.Cups.Add(newCup);
@@ -87,6 +88,8 @@
         public void DeleteCup(int id)
         {
             var currentCup = this.data.Cups.FirstOrDefault(x => x.Id == id);
+            var fixtures = this.data.Fixtures.Where(x => x.CupId == currentCup.Id).ToList();
+            this.data.Fixtures.RemoveRange(fixtures);
             this.data.Cups.Remove(currentCup);
             this.data.SaveChanges();
         }

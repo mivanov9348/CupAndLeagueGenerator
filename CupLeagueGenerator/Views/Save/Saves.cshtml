@@ -1,44 +1,58 @@
-﻿
+﻿@using CupLeagueGenerator.Infrastructure.Models
+@model SavesModel
+
 <head>
-    <link href="~/css/Saves.css" />
+    <link rel="stylesheet" href="~/css/Saves.css" />
 </head>
 
 <body>
-    <table>
-        <caption>Statement Summary</caption>
-        <thead>
-            <tr>
-                <th scope="col">Account</th>
-                <th scope="col">Due Date</th>
-                <th scope="col">Amount</th>
-                <th scope="col">Period</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td data-label="Account">Visa - 3412</td>
-                <td data-label="Due Date">04/01/2016</td>
-                <td data-label="Amount">$1,190</td>
-                <td data-label="Period">03/01/2016 - 03/31/2016</td>
-            </tr>
-            <tr>
-                <td scope="row" data-label="Account">Visa - 6076</td>
-                <td data-label="Due Date">03/01/2016</td>
-                <td data-label="Amount">$2,443</td>
-                <td data-label="Period">02/01/2016 - 02/29/2016</td>
-            </tr>
-            <tr>
-                <td scope="row" data-label="Account">Corporate AMEX</td>
-                <td data-label="Due Date">03/01/2016</td>
-                <td data-label="Amount">$1,181</td>
-                <td data-label="Period">02/01/2016 - 02/29/2016</td>
-            </tr>
-            <tr>
-                <td scope="row" data-label="Acount">Visa - 3412</td>
-                <td data-label="Due Date">02/01/2016</td>
-                <td data-label="Amount">$842</td>
-                <td data-label="Period">01/01/2016 - 01/31/2016</td>
-            </tr>
-        </tbody>
-    </table>
+    <form method="get">
+        <h1>My Cups</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Teams</th>
+                    <th scope="col" colspan=2>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cup in @Model.Cups)
+                {
+                    <tr>
+                        <td>1</td>
+                        <td>@cup.Name</td>
+                        <td>@cup.TeamsCount</td>
+                        <td><input type="submit" class="Load" asp-action="LoadCup" asp-route-id="@cup.Id" value="Load" /></td>
+                        <td><input type="submit" class="Delete" asp-action="DeleteCup" asp-route-id="@cup.Id" value="Delete" /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <h1>My Leagues</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Teams</th>
+                    <th scope="col" colspan=2>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var league in @Model.Leagues)
+                {
+                    <tr>
+                        <td>1</td>
+                        <td>@league.Name</td>
+                        <td>@league.TeamsCount</td>
+                        <td><input type="submit" class="Load" asp-action="LoadLeague" asp-route-id="@league.Id" value="Load" /></td>
+                        <td><input type="submit" class="Delete" asp-action="DeleteLeague" asp-route-id="@league.Id" value="Delete" /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
 </body>

@@ -7,8 +7,8 @@
 
     public class LeagueController : Controller
     {
-        private readonly ILeagueServices leagueService;
-        public LeagueController(ILeagueServices leagueService)
+        private readonly ILeagueService leagueService;
+        public LeagueController(ILeagueService leagueService)
         {
             this.leagueService = leagueService;
         }

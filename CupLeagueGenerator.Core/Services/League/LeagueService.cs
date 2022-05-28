@@ -3,7 +3,7 @@
     using CupLeagueGenerator.Data;
     using CupLeagueGenerator.Infrastructure.Data.DataModels;
     using CupLeagueGenerator.Infrastructure.Models;
-    public class LeagueService : ILeagueServices
+    public class LeagueService : ILeagueService
     {
         private Random rnd;
         private readonly CupLeagueDbContext data;
@@ -17,7 +17,8 @@
             var newLeague = new League
             {
                 Name = model.LeagueName,
-                AppUserId = userId
+                AppUserId = userId,
+                TeamsCount = model.NumberOfTeams
             };
             this.data.Leagues.Add(newLeague);
             this.data.SaveChanges();
@@ -72,7 +73,7 @@
         {
             var fixtures = new List<Fixture>();
             foreach (var group in model.Groups)
-            {               
+            {
                 Shuffle(group.Teams);
                 var numOfMatches = group.Teams.Count / 2 * (group.Teams.Count - 1);
                 int numFixt = 0;
@@ -95,7 +96,7 @@
                         };
 
                         this.data.Fixtures.Add(newFixt);
-                        fixtures.Add(newFixt);                        
+                        fixtures.Add(newFixt);
                         numFixt++;
                         match++;
                     }
@@ -138,8 +139,25 @@
                 teams[i] = value;
             }
         }
+        public List<League> GetUsersLeagues(string userId) => this.data.Leagues.Where(x => x.AppUserId == userId).ToList();
 
+        public void DeleteLeague(int id)
+        {
+            var currentLeague = this.data.Leagues.FirstOrDefault(x => x.Id == id);
+            var groups = this.data.Groups.Where(x => x.LeagueId == currentLeague.Id).ToList();
+            var fixtures = this.data.Fixtures.Where(x => x.LeagueId == currentLeague.Id).ToList();
+            var teams = this.data.Teams.ToList();
 
+            foreach (var group in groups)
+            {
+                group.Teams.RemoveRange(0, group.Teams.Count());
+            }
+
+            this.data.Fixtures.RemoveRange(fixtures);
+            this.data.Groups.RemoveRange(groups);
+            this.data.Leagues.Remove(currentLeague);
+            this.data.SaveChanges();
+        }
     }
 }
 

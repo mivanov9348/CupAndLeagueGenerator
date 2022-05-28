@@ -15,7 +15,7 @@ builder.Services.AddDbContext<CupLeagueDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddScoped<ICupService, CupService>();
-builder.Services.AddScoped<ILeagueServices, LeagueService>();
+builder.Services.AddScoped<ILeagueService, LeagueService>();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(o =>
 {

@@ -1,5 +1,11 @@
-﻿table {
-    border: 1px solid #ccc;
+﻿body {
+    line-height: 1.25;
+    font-family: "Mandy's Sketch";
+    background-color: lightblue;
+}
+
+table {
+    border: 2px solid black;
     border-collapse: collapse;
     margin: 0;
     padding: 0;
@@ -13,6 +19,7 @@
     }
 
     table tr {
+        
         background-color: #f8f8f8;
         border: 1px solid #ddd;
         padding: .35em;
@@ -79,7 +86,24 @@
             }
 }
 
-body {
-    font-family: "Open Sans", sans-serif;
-    line-height: 1.25;
+
+
+h1 {
+    text-align: center;
 }
+
+.Load {
+    background-color: yellow;
+}
+
+    .Load:hover {
+        font-weight: bolder;
+    }
+
+.Delete {
+    background-color: red;
+}
+
+    .Delete:hover {
+        font-weight: bolder;
+    }
