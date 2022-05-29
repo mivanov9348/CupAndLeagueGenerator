@@ -4,7 +4,6 @@
     using CupLeagueGenerator.Infrastructure.Models;
     using Microsoft.AspNetCore.Mvc;
     using System.Security.Claims;
-
     public class LeagueController : Controller
     {
         private readonly ILeagueService leagueService;
@@ -47,10 +46,8 @@
                 model.Fixtures = leagueService.GetLeagueFixtures(currentLeague);
                 model.Groups = leagueService.GetLeagueGroups(currentLeague);
                 return View("LeagueFixtures", model);
-            }
-                        
-
-       
+            }                     
+                   
         }
 
         private string GetUserId()

@@ -58,13 +58,12 @@
 
                     var newTeam = new Team
                     {
-                        Name = team
+                        Name = team,
+                        GroupId = group.Id
                     };
-                    this.data.Teams.Add(newTeam);
-                    group.Teams.Add(newTeam);
+                    this.data.Teams.Add(newTeam);                   
                     allTeams.Remove(team);
                 }
-                this.data.SaveChanges();
             }
             this.data.SaveChanges();
             return model.Groups;
@@ -160,8 +159,14 @@
         public League GetCurrentLeague(int leagueId) => this.data.Leagues.FirstOrDefault(x => x.Id == leagueId);
         public List<Group> GetLeagueGroups(League currentLeague)
         {
-            return this.data.Groups.Where(x => x.LeagueId == currentLeague.Id).ToList();
+            var groups = this.data.Groups.Where(x => x.LeagueId == currentLeague.Id).ToList();
 
+           foreach (var group in groups)
+           {
+               var teams = this.data.Teams.Where(x => x.GroupId == group.Id).ToList();               
+           }
+
+            return groups;
         }
         public List<Fixture> GetLeagueFixtures(League currentLeague)
         {
