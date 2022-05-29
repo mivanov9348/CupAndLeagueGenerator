@@ -140,7 +140,6 @@
             }
         }
         public List<League> GetUsersLeagues(string userId) => this.data.Leagues.Where(x => x.AppUserId == userId).ToList();
-
         public void DeleteLeague(int id)
         {
             var currentLeague = this.data.Leagues.FirstOrDefault(x => x.Id == id);
@@ -157,6 +156,16 @@
             this.data.Groups.RemoveRange(groups);
             this.data.Leagues.Remove(currentLeague);
             this.data.SaveChanges();
+        }
+        public League GetCurrentLeague(int leagueId) => this.data.Leagues.FirstOrDefault(x => x.Id == leagueId);
+        public List<Group> GetLeagueGroups(League currentLeague)
+        {
+            return this.data.Groups.Where(x => x.LeagueId == currentLeague.Id).ToList();
+
+        }
+        public List<Fixture> GetLeagueFixtures(League currentLeague)
+        {
+            return this.data.Fixtures.Where(x => x.LeagueId == currentLeague.Id).ToList();
         }
     }
 }

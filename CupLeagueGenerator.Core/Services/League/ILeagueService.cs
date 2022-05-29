@@ -10,6 +10,9 @@
         List<Group> FillTeamsInGroups(LeagueModel model, string userId);
         List<Fixture> GetFixtures(LeagueModel model, string userId);
         List<League> GetUsersLeagues(string userId);
+        League GetCurrentLeague(int leagueId);
+        List<Group> GetLeagueGroups(League currentLeague);
+        List<Fixture> GetLeagueFixtures(League currentLeague);
         void DeleteLeague(int id);
     }
 }
