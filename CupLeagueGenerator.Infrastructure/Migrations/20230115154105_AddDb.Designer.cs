@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CupLeagueGenerator.Infrastructure.Migrations
 {
     [DbContext(typeof(CupLeagueDbContext))]
-    [Migration("20220528110905_AddTeamsCount")]
-    partial class AddTeamsCount
+    [Migration("20230115154105_AddDb")]
+    partial class AddDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

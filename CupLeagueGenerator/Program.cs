@@ -19,7 +19,7 @@ builder.Services.AddScoped<ILeagueService, LeagueService>();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(o =>
 {
-    o.SignIn.RequireConfirmedAccount = true;
+    o.SignIn.RequireConfirmedAccount = false;
     o.Password.RequireDigit = false;
     o.Password.RequireLowercase = false;
     o.Password.RequireUppercase = false;

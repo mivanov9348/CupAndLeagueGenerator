@@ -1,0 +1,17 @@
+﻿body {
+    font-weight: bolder;  
+    text-align: center;
+}
+
+.row{
+    margin-left:40%;
+}
+
+.w-100{
+    background-color:dimgrey;
+    color:black;
+}
+
+.w-100 :hover{
+    background-color:black;
+}
