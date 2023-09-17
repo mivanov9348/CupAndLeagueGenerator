@@ -7,5 +7,8 @@
         public List<Group> Groups { get; set; } = new List<Group>();
         public List<Cup> Cups { get; set; } = new List<Cup>();
         public List<League> Leagues { get; set; } = new List<League>();
+        public List<Participant> Participants { get; set; } = new List<Participant>();
+        public List<Draw> Draws { get; set; } = new List<Draw>();
+
     }
 }

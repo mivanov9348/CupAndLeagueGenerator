@@ -182,6 +182,31 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Draws",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TeamsCount = table.Column<int>(type: "int", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Draws", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Draws_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Draws_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Leagues",
                 columns: table => new
                 {
@@ -217,7 +242,8 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                     TeamsCount = table.Column<int>(type: "int", nullable: false),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    LeagueId = table.Column<int>(type: "int", nullable: false)
+                    LeagueId = table.Column<int>(type: "int", nullable: false),
+                    DrawId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -233,11 +259,66 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
+                        name: "FK_Groups_Draws_DrawId",
+                        column: x => x.DrawId,
+                        principalTable: "Draws",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Groups_Leagues_LeagueId",
                         column: x => x.LeagueId,
                         principalTable: "Leagues",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Participants",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CupId = table.Column<int>(type: "int", nullable: true),
+                    LeagueId = table.Column<int>(type: "int", nullable: true),
+                    GroupId = table.Column<int>(type: "int", nullable: true),
+                    DrawId = table.Column<int>(type: "int", nullable: true),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Participants", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Participants_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Participants_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Participants_Cups_CupId",
+                        column: x => x.CupId,
+                        principalTable: "Cups",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Participants_Draws_DrawId",
+                        column: x => x.DrawId,
+                        principalTable: "Draws",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Participants_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Participants_Leagues_LeagueId",
+                        column: x => x.LeagueId,
+                        principalTable: "Leagues",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -247,16 +328,20 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Round = table.Column<int>(type: "int", nullable: false),
-                    HomeTeam = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    HomeTeamGoals = table.Column<int>(type: "int", nullable: false),
-                    AwayTeam = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AwayTeamGoals = table.Column<int>(type: "int", nullable: false),
-                    Winner = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CompetitionName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HomeTeamName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AwayTeamName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HomeParticipantId = table.Column<int>(type: "int", nullable: true),
+                    AwayParticipantId = table.Column<int>(type: "int", nullable: true),
+                    LeagueId = table.Column<int>(type: "int", nullable: true),
                     GroupId = table.Column<int>(type: "int", nullable: true),
                     CupId = table.Column<int>(type: "int", nullable: true),
-                    LeagueId = table.Column<int>(type: "int", nullable: true)
+                    HomeParticipantScore = table.Column<int>(type: "int", nullable: false),
+                    AwayParticipantScore = table.Column<int>(type: "int", nullable: false),
+                    IsPlayed = table.Column<bool>(type: "bit", nullable: false),
+                    WinnerTeamId = table.Column<int>(type: "int", nullable: true),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -286,25 +371,18 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                         column: x => x.LeagueId,
                         principalTable: "Leagues",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Teams",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    GroupId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Teams", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Teams_Groups_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "Groups",
-                        principalColumn: "Id");
+                        name: "FK_Fixtures_Participants_AwayParticipantId",
+                        column: x => x.AwayParticipantId,
+                        principalTable: "Participants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Fixtures_Participants_HomeParticipantId",
+                        column: x => x.HomeParticipantId,
+                        principalTable: "Participants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -357,9 +435,24 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Draws_AppUserId",
+                table: "Draws",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Draws_UserId",
+                table: "Draws",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Fixtures_AppUserId",
                 table: "Fixtures",
                 column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Fixtures_AwayParticipantId",
+                table: "Fixtures",
+                column: "AwayParticipantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Fixtures_CupId",
@@ -370,6 +463,11 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                 name: "IX_Fixtures_GroupId",
                 table: "Fixtures",
                 column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Fixtures_HomeParticipantId",
+                table: "Fixtures",
+                column: "HomeParticipantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Fixtures_LeagueId",
@@ -385,6 +483,11 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                 name: "IX_Groups_AppUserId",
                 table: "Groups",
                 column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Groups_DrawId",
+                table: "Groups",
+                column: "DrawId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Groups_LeagueId",
@@ -407,9 +510,34 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Teams_GroupId",
-                table: "Teams",
+                name: "IX_Participants_AppUserId",
+                table: "Participants",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Participants_CupId",
+                table: "Participants",
+                column: "CupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Participants_DrawId",
+                table: "Participants",
+                column: "DrawId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Participants_GroupId",
+                table: "Participants",
                 column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Participants_LeagueId",
+                table: "Participants",
+                column: "LeagueId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Participants_UserId",
+                table: "Participants",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -433,16 +561,19 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                 name: "Fixtures");
 
             migrationBuilder.DropTable(
-                name: "Teams");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "Participants");
 
             migrationBuilder.DropTable(
                 name: "Cups");
 
             migrationBuilder.DropTable(
                 name: "Groups");
+
+            migrationBuilder.DropTable(
+                name: "Draws");
 
             migrationBuilder.DropTable(
                 name: "Leagues");

@@ -51,6 +51,32 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                     b.ToTable("Cups");
                 });
 
+            modelBuilder.Entity("CupLeagueGenerator.Infrastructure.Data.DataModels.Draw", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("TeamsCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Draws");
+                });
+
             modelBuilder.Entity("CupLeagueGenerator.Infrastructure.Data.DataModels.Fixture", b =>
                 {
                     b.Property<int>("Id")
@@ -62,11 +88,17 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                     b.Property<string>("AppUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AwayTeam")
+                    b.Property<int?>("AwayParticipantId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AwayParticipantScore")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AwayTeamName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AwayTeamGoals")
-                        .HasColumnType("int");
+                    b.Property<string>("CompetitionName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("CupId")
                         .HasColumnType("int");
@@ -74,11 +106,17 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                     b.Property<int?>("GroupId")
                         .HasColumnType("int");
 
-                    b.Property<string>("HomeTeam")
+                    b.Property<int?>("HomeParticipantId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HomeParticipantScore")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HomeTeamName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("HomeTeamGoals")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsPlayed")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("LeagueId")
                         .HasColumnType("int");
@@ -89,16 +127,20 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Winner")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("WinnerTeamId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
 
+                    b.HasIndex("AwayParticipantId");
+
                     b.HasIndex("CupId");
 
                     b.HasIndex("GroupId");
+
+                    b.HasIndex("HomeParticipantId");
 
                     b.HasIndex("LeagueId");
 
@@ -118,6 +160,9 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                     b.Property<string>("AppUserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("DrawId")
+                        .HasColumnType("int");
+
                     b.Property<int>("LeagueId")
                         .HasColumnType("int");
 
@@ -133,6 +178,8 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
+
+                    b.HasIndex("DrawId");
 
                     b.HasIndex("LeagueId");
 
@@ -170,7 +217,7 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                     b.ToTable("Leagues");
                 });
 
-            modelBuilder.Entity("CupLeagueGenerator.Infrastructure.Data.DataModels.Team", b =>
+            modelBuilder.Entity("CupLeagueGenerator.Infrastructure.Data.DataModels.Participant", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -178,17 +225,42 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("CupId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DrawId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LeagueId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("CupId");
+
+                    b.HasIndex("DrawId");
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Teams");
+                    b.HasIndex("LeagueId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Participants");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -419,11 +491,29 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("CupLeagueGenerator.Infrastructure.Data.DataModels.Draw", b =>
+                {
+                    b.HasOne("CupLeagueGenerator.Infrastructure.Data.DataModels.ApplicationUser", null)
+                        .WithMany("Draws")
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("CupLeagueGenerator.Infrastructure.Data.DataModels.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CupLeagueGenerator.Infrastructure.Data.DataModels.Fixture", b =>
                 {
                     b.HasOne("CupLeagueGenerator.Infrastructure.Data.DataModels.ApplicationUser", null)
                         .WithMany("Fixtures")
                         .HasForeignKey("AppUserId");
+
+                    b.HasOne("CupLeagueGenerator.Infrastructure.Data.DataModels.Participant", "AwayParticipant")
+                        .WithMany("AwayFixtures")
+                        .HasForeignKey("AwayParticipantId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CupLeagueGenerator.Infrastructure.Data.DataModels.Cup", "Cup")
                         .WithMany("Fixtures")
@@ -433,6 +523,11 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                         .WithMany("Fixtures")
                         .HasForeignKey("GroupId");
 
+                    b.HasOne("CupLeagueGenerator.Infrastructure.Data.DataModels.Participant", "HomeParticipant")
+                        .WithMany("HomeFixtures")
+                        .HasForeignKey("HomeParticipantId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("CupLeagueGenerator.Infrastructure.Data.DataModels.League", "League")
                         .WithMany("Fixtures")
                         .HasForeignKey("LeagueId");
@@ -441,9 +536,13 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("UserId");
 
+                    b.Navigation("AwayParticipant");
+
                     b.Navigation("Cup");
 
                     b.Navigation("Group");
+
+                    b.Navigation("HomeParticipant");
 
                     b.Navigation("League");
 
@@ -456,6 +555,12 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                         .WithMany("Groups")
                         .HasForeignKey("AppUserId");
 
+                    b.HasOne("CupLeagueGenerator.Infrastructure.Data.DataModels.Draw", "Draw")
+                        .WithMany("Groups")
+                        .HasForeignKey("DrawId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CupLeagueGenerator.Infrastructure.Data.DataModels.League", "League")
                         .WithMany("Groups")
                         .HasForeignKey("LeagueId")
@@ -465,6 +570,8 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                     b.HasOne("CupLeagueGenerator.Infrastructure.Data.DataModels.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Draw");
 
                     b.Navigation("League");
 
@@ -484,11 +591,41 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CupLeagueGenerator.Infrastructure.Data.DataModels.Team", b =>
+            modelBuilder.Entity("CupLeagueGenerator.Infrastructure.Data.DataModels.Participant", b =>
                 {
-                    b.HasOne("CupLeagueGenerator.Infrastructure.Data.DataModels.Group", null)
-                        .WithMany("Teams")
+                    b.HasOne("CupLeagueGenerator.Infrastructure.Data.DataModels.ApplicationUser", null)
+                        .WithMany("Participants")
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("CupLeagueGenerator.Infrastructure.Data.DataModels.Cup", "Cup")
+                        .WithMany("Participants")
+                        .HasForeignKey("CupId");
+
+                    b.HasOne("CupLeagueGenerator.Infrastructure.Data.DataModels.Draw", "Draw")
+                        .WithMany("Participants")
+                        .HasForeignKey("DrawId");
+
+                    b.HasOne("CupLeagueGenerator.Infrastructure.Data.DataModels.Group", "Group")
+                        .WithMany("Participants")
                         .HasForeignKey("GroupId");
+
+                    b.HasOne("CupLeagueGenerator.Infrastructure.Data.DataModels.League", "League")
+                        .WithMany("Participants")
+                        .HasForeignKey("LeagueId");
+
+                    b.HasOne("CupLeagueGenerator.Infrastructure.Data.DataModels.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Cup");
+
+                    b.Navigation("Draw");
+
+                    b.Navigation("Group");
+
+                    b.Navigation("League");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -545,13 +682,22 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
             modelBuilder.Entity("CupLeagueGenerator.Infrastructure.Data.DataModels.Cup", b =>
                 {
                     b.Navigation("Fixtures");
+
+                    b.Navigation("Participants");
+                });
+
+            modelBuilder.Entity("CupLeagueGenerator.Infrastructure.Data.DataModels.Draw", b =>
+                {
+                    b.Navigation("Groups");
+
+                    b.Navigation("Participants");
                 });
 
             modelBuilder.Entity("CupLeagueGenerator.Infrastructure.Data.DataModels.Group", b =>
                 {
                     b.Navigation("Fixtures");
 
-                    b.Navigation("Teams");
+                    b.Navigation("Participants");
                 });
 
             modelBuilder.Entity("CupLeagueGenerator.Infrastructure.Data.DataModels.League", b =>
@@ -559,17 +705,30 @@ namespace CupLeagueGenerator.Infrastructure.Migrations
                     b.Navigation("Fixtures");
 
                     b.Navigation("Groups");
+
+                    b.Navigation("Participants");
+                });
+
+            modelBuilder.Entity("CupLeagueGenerator.Infrastructure.Data.DataModels.Participant", b =>
+                {
+                    b.Navigation("AwayFixtures");
+
+                    b.Navigation("HomeFixtures");
                 });
 
             modelBuilder.Entity("CupLeagueGenerator.Infrastructure.Data.DataModels.ApplicationUser", b =>
                 {
                     b.Navigation("Cups");
 
+                    b.Navigation("Draws");
+
                     b.Navigation("Fixtures");
 
                     b.Navigation("Groups");
 
                     b.Navigation("Leagues");
+
+                    b.Navigation("Participants");
                 });
 #pragma warning restore 612, 618
         }

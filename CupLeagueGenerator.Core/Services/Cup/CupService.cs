@@ -12,15 +12,15 @@
             this.data = data;
             rnd = new Random();
         }
-        public List<Fixture> GenerateCupFixtures(CupModel model, string userId)
-        {
-            var teams = model.Teams;
-            var rounds = GetRoundsToFinal(teams.Count());
-            var matches = teams.Count / 2;
-            var fixtures = GenerateFixtures(model, teams, matches, userId);
-            return fixtures;
-        }
-        private List<Fixture> GenerateFixtures(CupModel model, List<string> teams, int matches, string userId)
+       // public List<Fixture> GenerateCupFixtures(CupModel model, string userId)
+       // {
+       //     var teams = model.CupParticipants;
+       //     var rounds = GetRoundsToFinal(teams);
+       //     var matches = teams / 2;
+       //     var fixtures = GenerateFixtures(model, teams, matches, userId);
+       //     return fixtures;
+       // }
+        private List<Fixture> GenerateFixtures(CupModel model, List<Participant> teams, int matches, string userId)
         {
             var fixtures = new List<Fixture>();
             var currentUser = this.data.Users.FirstOrDefault(x => x.Id == userId);
@@ -45,8 +45,8 @@
                 var newFixt = new Fixture
                 {
                     AppUserId = userId,
-                    HomeTeam = homeTeam,
-                    AwayTeam = awayTeam,
+                    HomeParticipant = homeTeam,
+                    AwayParticipant = awayTeam,
                     Round = 1,
                     Cup = newCup,
                     CupId = newCup.Id

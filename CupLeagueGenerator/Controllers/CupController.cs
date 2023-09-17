@@ -24,23 +24,23 @@
         {
             return View(model);
         }
-        public IActionResult CupFixtures(CupModel model)
-        {
-            var userId = GetUserId();
-            var currentCup = cupService.GetCurrentCup(model.Id);
-
-            if (model.Fixtures != null)
-            {              
-                model.Fixtures = cupService.GetCupFixtures(currentCup);
-                return View(model);
-            }
-            
-            var fixtures = cupService.GenerateCupFixtures(model, userId);
-            model.Matches = fixtures.Count();
-            model.Fixtures = fixtures;
-
-            return View(model);
-        }
+      // public IActionResult CupFixtures(CupModel model)
+      // {
+      //     var userId = GetUserId();
+      //     var currentCup = cupService.GetCurrentCup(model.Id);
+      //
+      //     if (model.Fixtures != null)
+      //     {              
+      //         model.Fixtures = cupService.GetCupFixtures(currentCup);
+      //         return View(model);
+      //     }
+      //     
+      //     var fixtures = cupService.GenerateCupFixtures(model, userId);
+      //     model.Matches = fixtures.Count();
+      //     model.Fixtures = fixtures;
+      //
+      //     return View(model);
+      // }
         private string GetUserId()
         {
             return User.FindFirst(ClaimTypes.NameIdentifier).Value;

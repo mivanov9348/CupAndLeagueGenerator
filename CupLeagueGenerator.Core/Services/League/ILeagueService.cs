@@ -8,7 +8,7 @@
         League CreateLeague(LeagueModel model,string userId);
         List<Group> GenerateGroups(LeagueModel model, string userId);
         List<Group> FillTeamsInGroups(LeagueModel model, string userId);
-        List<Fixture> GetFixtures(LeagueModel model, string userId);
+      //  List<Fixture> GetFixtures(LeagueModel model, string userId);
         List<League> GetUsersLeagues(string userId);
         League GetCurrentLeague(int leagueId);
         List<Group> GetLeagueGroups(League currentLeague);

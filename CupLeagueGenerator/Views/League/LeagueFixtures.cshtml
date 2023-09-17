@@ -21,7 +21,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var team in @group.Teams)
+                    @foreach (var team in @group.Participants)
                     {
                         <tr>
                             <td colspan=5>@team.Name</td>
@@ -45,10 +45,10 @@
                         fixturesCount++;
                         <tr>
                             <th style="width:10%" scope="row">@fixturesCount</th>
-                            <td>@team.HomeTeam</td>
-                            <td>@team.HomeTeamGoals</td>
-                            <td>@team.AwayTeamGoals</td>
-                            <td>@team.AwayTeam</td>
+                            <td>@team.HomeParticipant</td>
+                            <td>@team.HomeParticipantScore</td>
+                            <td>@team.AwayParticipantScore</td>
+                            <td>@team.AwayParticipant</td>
                         </tr>
                     }
 
