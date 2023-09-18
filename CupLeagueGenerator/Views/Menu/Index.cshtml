@@ -1,0 +1,68 @@
+﻿@using CupLeagueGenerator.Infrastructure.Data.DataModels
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<style>
+
+    body {
+        background-color: slategray;
+    }
+
+    h1 {
+        font-style: italic;
+    }
+
+    .container {
+        margin: 100px auto;
+        width: 300px;
+        text-align: center;
+    }
+
+    input {
+        margin-bottom: 10px; /* Adjust the margin as needed */
+
+        background-color: lightgray;
+        font-weight: bolder;
+        height: 30px;
+        width: 300px;
+        font-size: 18px;
+    }
+
+        input:hover {
+            background-color: lightsteelblue;
+        }
+
+    .line {
+        color: black;
+        width: 300px;
+        font-weight: bolder;
+    }
+</style>
+
+<body>
+    <form method="get">
+        <div class="container">
+            <h1>Menu</h1>
+            <hr class="line">
+            @if (!SignInManager.IsSignedIn(User))
+            {
+
+                <input type=submit asp-action="Index" asp-controller="Cup" value="Generate Cup">
+                <hr class="line">
+                <input type=submit value="Generate League">
+                <hr class="line">
+                <input type=submit value="Draw Random Participants">
+                <hr class="line">
+                <input type=submit value="Generate Fixtures">
+
+            }
+            else
+            {
+                <input type=submit value="Register" asp-area="Identity" asp-page="/Account/Register">
+                <hr class="line">
+                <input type=submit value="Login" asp-area="Identity" asp-page="/Account/Login">
+            }
+        </div>
+    </form>
+</body>

@@ -13,7 +13,9 @@
         public string CupName { get; set; }
         public int CupParticipants { get; set; }
         public int Matches { get; set; }
-        public List<string> Teams { get; set; }
+        public List<string> InputParticipants { get; set; }
+        public List<Participant> Participants { get; set; }
+
         public List<Cup> UserCups { get; set; }
         public List<Fixture> Fixtures { get; set; }
     }

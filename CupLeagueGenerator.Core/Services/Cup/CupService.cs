@@ -3,6 +3,9 @@
     using CupLeagueGenerator.Data;
     using CupLeagueGenerator.Infrastructure.Data.DataModels;
     using CupLeagueGenerator.Infrastructure.Models;
+    using Microsoft.EntityFrameworkCore;
+    using System.Text.RegularExpressions;
+
     public class CupService : ICupService
     {
         private Random rnd;
@@ -12,51 +15,9 @@
             this.data = data;
             rnd = new Random();
         }
-       // public List<Fixture> GenerateCupFixtures(CupModel model, string userId)
-       // {
-       //     var teams = model.CupParticipants;
-       //     var rounds = GetRoundsToFinal(teams);
-       //     var matches = teams / 2;
-       //     var fixtures = GenerateFixtures(model, teams, matches, userId);
-       //     return fixtures;
-       // }
-        private List<Fixture> GenerateFixtures(CupModel model, List<Participant> teams, int matches, string userId)
-        {
-            var fixtures = new List<Fixture>();
-            var currentUser = this.data.Users.FirstOrDefault(x => x.Id == userId);
 
-            var newCup = new Cup
-            {
-                Name = model.CupName,
-                AppUserId = userId,
-                TeamsCount = teams.Count
-            };
 
-            this.data.Cups.Add(newCup);
-            this.data.SaveChanges();
 
-            for (int i = 0; i < matches; i++)
-            {
-                var homeTeam = teams[rnd.Next(0, teams.Count)];
-                teams.Remove(homeTeam);
-                var awayTeam = teams[rnd.Next(0, teams.Count)];
-                teams.Remove(awayTeam);
-
-                var newFixt = new Fixture
-                {
-                    AppUserId = userId,
-                    HomeParticipant = homeTeam,
-                    AwayParticipant = awayTeam,
-                    Round = 1,
-                    Cup = newCup,
-                    CupId = newCup.Id
-                };
-                this.data.Fixtures.Add(newFixt);
-                fixtures.Add(newFixt);
-            }
-            this.data.SaveChanges();
-            return fixtures;
-        }
         private int GetRoundsToFinal(int teams)
         {
             switch (teams)
@@ -72,12 +33,18 @@
 
         public List<Cup> GetUserCups(string userId)
         {
-            return this.data.Cups.Where(x => x.AppUserId == userId).ToList();
+            if (userId != null)
+            {
+                return this.data.Cups.Where(x => x.AppUserId == userId).Include(x => x.Participants).ToList();
+            }
+            return this.data.Cups.Include(x => x.Participants).ToList();
         }
 
         public Cup GetCurrentCup(int id)
         {
-            return this.data.Cups.FirstOrDefault(x => x.Id == id);
+            return this.data.Cups.Include(x => x.Participants)
+                                 .Include(x => x.Fixtures)
+                                 .FirstOrDefault(x => x.Id == id);
         }
 
         public List<Fixture> GetCupFixtures(Cup currentCup)
@@ -89,9 +56,24 @@
         {
             var currentCup = this.data.Cups.FirstOrDefault(x => x.Id == id);
             var fixtures = this.data.Fixtures.Where(x => x.CupId == currentCup.Id).ToList();
+            var participants = this.data.Participants.Where(x => x.CupId == currentCup.Id).ToList();
+            this.data.Participants.RemoveRange(participants);
             this.data.Fixtures.RemoveRange(fixtures);
             this.data.Cups.Remove(currentCup);
             this.data.SaveChanges();
+        }
+
+        public Cup SaveCup(CupModel model, string userId)
+        {
+            var newCup = new Cup
+            {
+                Name = model.CupName,
+                Participants = model.Participants,
+                AppUserId = userId
+            };
+            this.data.Cups.Add(newCup);
+            this.data.SaveChanges();
+            return newCup;
         }
     }
 }

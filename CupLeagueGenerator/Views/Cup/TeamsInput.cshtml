@@ -19,15 +19,14 @@
         {
             <div class="form-group">
                 <label for="exampleFormControlInput1">Team @i</label>
-                <input asp-for="@Model.Teams" type="text" class="form-control" required="true" id="exampleFormControlInput1">
+                <input asp-for="@Model.InputParticipants" type="text" class="form-control" required="true" id="exampleFormControlInput1">
             </div>
         }
 
         <hr style="margin-left:130px" />
         <div class="form-group">
             <input type="hidden" asp-for="@Model.CupName" />
-            <input type="hidden" asp-for="@Model.CupParticipants" />
-            <input class="Button" asp-controller="Cup" asp-action="CupFixtures" type="submit" value="Create" />
+            <input class="Button" asp-controller="Cup" asp-action="SaveCup" type="submit" value="Save" />
         </div>
 
     </form>

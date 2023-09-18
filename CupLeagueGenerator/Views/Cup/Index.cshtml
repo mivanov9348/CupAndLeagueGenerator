@@ -7,34 +7,43 @@
     <link rel="stylesheet" href="~/css/cupIndex.css" />
 </head>
 
-<body>  
+<body>
 
-    <form class="form" method="post">
-        <div class="title">
-            <h1>Create Cup</h1>
-            <hr style="color:black" />
-        </div>
+    <form method="post">
+        <h1 style="text-align:center">Cups</h1>
+        <input class="newCupBtn" style="text-align:center" type="submit" asp-action="GenerateCup" value="Create New Cup" />
+        <hr />
+    </form>
+    <form method="post">
 
-        <div class="form-group">
-            <label for="exampleFormControlInput1">Cup Name</label>
-            <input asp-for="@Model.CupName" type="text" class="form-control" id="exampleFormControlInput1" required="true">
-        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>N</th>
+                    <th>Cup Name</th>
+                    <th>Participants</th>
+                    <th colspan="2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < Model.UserCups.Count; i++)
+                {
+                    var cup = Model.UserCups[i];
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>@cup.Name</td>
+                        <td>
+                            @cup.Participants.Count()
+                        </td>
+                        <td>
+                            <button asp-controller="Cup" asp-action="OpenCup" asp-route-cupId="@cup.Id">Open</button>
+                            <button asp-controller="Cup" asp-action="DeleteCup" asp-route-cupId="@cup.Id">Delete</button>
+                        </td>
 
-        <div class="form-group">
-            <label for="exampleFormControlSelect1">Teams</label>
-            <select asp-for="@Model.CupParticipants" class="form-control" id="exampleFormControlSelect1">
-                <option value="4">4</option>
-                <option value="8">8</option>
-                <option value="16">16</option>
-                <option value="32">32</option>
-                <option value="64">64</option>
-            </select>
-        </div>
-        <hr style="margin-left:130px" />
-        <div class="form-group">
-            <input class="Button" asp-controller="Cup" asp-action="TeamsInput" type="submit" value="Next" />
-        </div>
-
+                    </tr>
+                }
+            </tbody>
+        </table>
     </form>
 
 

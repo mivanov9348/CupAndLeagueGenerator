@@ -1,5 +1,7 @@
 using CupLeagueGenerator.Core.Services.Cup;
+using CupLeagueGenerator.Core.Services.Fixture;
 using CupLeagueGenerator.Core.Services.League;
+using CupLeagueGenerator.Core.Services.Participant;
 using CupLeagueGenerator.Data;
 using CupLeagueGenerator.Infrastructure.Data.DataModels;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +18,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddScoped<ICupService, CupService>();
 builder.Services.AddScoped<ILeagueService, LeagueService>();
+builder.Services.AddScoped<IFixtureService, FixtureService>();
+builder.Services.AddScoped<IParticipantService, ParticipantService>();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(o =>
 {
@@ -53,7 +57,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Menu}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.Run();

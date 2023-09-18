@@ -1,44 +1,36 @@
-﻿body {
+﻿
+
+body {
     background-color: grey;
-    font-family:"Mandy's Sketch";
+    font-family: "Mandy's Sketch";
+    text-align: center;
 }
 
-.title {
-    margin-left: 25%;
-    margin-top: -100px;
+.newCupBtn:hover {
+    background-color: grey;
+    color:white;
+    font-weight:bolder;
 }
 
 .form {
-    margin-top: 100px;
-    width: 40%;
-    margin-left: 20%;
+    margin: 0 auto;
+    width: 50%;
     text-align: center;
     font-weight: bolder;
     font-size: 20px;
 }
 
-.form-group {
-    margin-left: 25%;
-}
 
-input {
+/* Add this CSS to center the table horizontally */
+.table {
+    width: fit-content; /* Adjust the width as needed */
+    margin: 0 auto; /* Set left and right margins to "auto" to center */
     text-align: center;
 }
 
-.Button {
-    margin-left: 20px;
-    margin-top: 10px;
-    color: black;
-    font-weight: bolder;
-    background-color: white;
-}
-
-    .Button:hover {
-        background-color: gray;
-        color: black;
+    /* Your existing CSS for the table styling can remain the same */
+    .table thead th {
+        background-color: #ccc;
     }
 
-table, th, td {
-    border: 1px solid;
-    margin-left: -450px;
-}
+/* Add your other table styles here */
