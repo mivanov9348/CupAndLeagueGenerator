@@ -12,7 +12,8 @@
         List<League> GetUsersLeagues(string userId);
         League GetCurrentLeague(int leagueId);
         List<Group> GetLeagueGroups(League currentLeague);
-        List<Fixture> GetLeagueFixtures(League currentLeague);
+       // List<Fixture> GetLeagueFixtures(League currentLeague);
         void DeleteLeague(int id);
+        void GenerateLeague(LeagueModel model, string userId);
     }
 }

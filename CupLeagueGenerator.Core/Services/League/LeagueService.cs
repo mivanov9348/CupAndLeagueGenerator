@@ -3,6 +3,8 @@
     using CupLeagueGenerator.Data;
     using CupLeagueGenerator.Infrastructure.Data.DataModels;
     using CupLeagueGenerator.Infrastructure.Models;
+    using Microsoft.EntityFrameworkCore;
+
     public class LeagueService : ILeagueService
     {
         private Random rnd;
@@ -48,69 +50,69 @@
         }
         public List<Group> FillTeamsInGroups(LeagueModel model, string userId)
         {
-            var allTeams = model.Teams;
-
-            foreach (var group in model.Groups)
-            {
-                for (int i = 0; i < model.TeamsPerGroup; i++)
-                {
-                    var team = allTeams[rnd.Next(0, allTeams.Count())];
-
-                    var newTeam = new Participant
-                    {
-                        Name = team,
-                        GroupId = group.Id
-                    };
-                    this.data.Participants.Add(newTeam);                   
-                    allTeams.Remove(team);
-                }
-            }
-            this.data.SaveChanges();
+            // var allTeams = model.Participants;
+            //
+            // foreach (var group in model.Groups)
+            // {
+            //     for (int i = 0; i < model.TeamsPerGroup; i++)
+            //     {
+            //         var team = allTeams[rnd.Next(0, allTeams.Count())];
+            //
+            //         var newTeam = new Participant
+            //         {
+            //             Name = team,
+            //             GroupId = group.Id
+            //         };
+            //         this.data.Participants.Add(newTeam);
+            //         allTeams.Remove(team);
+            //     }
+            // }
+            // this.data.SaveChanges();
             return model.Groups;
         }
-      //  public List<Fixture> GetFixtures(LeagueModel model, string userId)
-      //  {
-      //      var fixtures = new List<Fixture>();
-      //      foreach (var group in model.Groups)
-      //      {
-      //          Shuffle(group.Participants);
-      //          var numOfMatches = group.Participants.Count / 2 * (group.Participants.Count - 1);
-      //          int numFixt = 0;
-      //
-      //          while (numFixt < numOfMatches)
-      //          {
-      //              var match = 1;
-      //              for (int i = 0; i < group.Participants.Count() / 2; i += 1)
-      //              {
-      //                  var ht = group.Participants[i];
-      //                  var at = group.Participants[(group.Participants.Count() - 1 - i)];
-      //
-      //                  var newFixt = new Fixture
-      //                  {
-      //                      HomeParticipant = ht.,
-      //                      AwayParticipant = at.Name,
-      //                      AppUserId = userId,
-      //                      LeagueId = group.LeagueId,
-      //                      GroupId = group.Id
-      //                  };
-      //
-      //                  this.data.Fixtures.Add(newFixt);
-      //                  fixtures.Add(newFixt);
-      //                  numFixt++;
-      //                  match++;
-      //              }
-      //
-      //              for (int i = group.Teams.Count - 1; i > 1; i--)
-      //              {
-      //                  var temp = group.Teams[i - 1];
-      //                  group.Teams[i - 1] = group.Teams[i];
-      //                  group.Teams[i] = temp;
-      //              }
-      //          }
-      //      }
-      //      this.data.SaveChanges();
-      //      return fixtures;
-      //  }
+        //  public List<Fixture> GetFixtures(LeagueModel model, string userId)
+        //  {
+        //      var fixtures = new List<Fixture>();
+        //      foreach (var group in model.Groups)
+        //      {
+        //          Shuffle(group.Participants);
+        //          var numOfMatches = group.Participants.Count / 2 * (group.Participants.Count - 1);
+        //          int numFixt = 0;
+        //
+        //          while (numFixt < numOfMatches)
+        //          {
+        //              var match = 1;
+        //              for (int i = 0; i < group.Participants.Count() / 2; i += 1)
+        //              {
+        //                  var ht = group.Participants[i];
+        //                  var at = group.Participants[(group.Participants.Count() - 1 - i)];
+        //
+        //                  var newFixt = new Fixture
+        //                  {
+        //                      HomeParticipant = ht.,
+        //                      AwayParticipant = at.Name,
+        //                      AppUserId = userId,
+        //                      LeagueId = group.LeagueId,
+        //                      GroupId = group.Id
+        //                  };
+        //
+        //                  this.data.Fixtures.Add(newFixt);
+        //                  fixtures.Add(newFixt);
+        //                  numFixt++;
+        //                  match++;
+        //              }
+        //
+        //              for (int i = group.Teams.Count - 1; i > 1; i--)
+        //              {
+        //                  var temp = group.Teams[i - 1];
+        //                  group.Teams[i - 1] = group.Teams[i];
+        //                  group.Teams[i] = temp;
+        //              }
+        //          }
+        //      }
+        //      this.data.SaveChanges();
+        //      return fixtures;
+        //  }
         public (string, bool) IsTeamsValid(LeagueModel model)
         {
             var message = "";
@@ -138,7 +140,11 @@
                 teams[i] = value;
             }
         }
-        public List<League> GetUsersLeagues(string userId) => this.data.Leagues.Where(x => x.AppUserId == userId).ToList();
+        public List<League> GetUsersLeagues(string userId)
+        {
+            var currentLeagues = this.data.Leagues.Where(x => x.AppUserId == userId).Include(x => x.Participants).ToList();
+            return currentLeagues;
+        }
         public void DeleteLeague(int id)
         {
             var currentLeague = this.data.Leagues.FirstOrDefault(x => x.Id == id);
@@ -161,16 +167,41 @@
         {
             var groups = this.data.Groups.Where(x => x.LeagueId == currentLeague.Id).ToList();
 
-           foreach (var group in groups)
-           {
-               var teams = this.data.Participants.Where(x => x.GroupId == group.Id).ToList();               
-           }
+            foreach (var group in groups)
+            {
+                var teams = this.data.Participants.Where(x => x.GroupId == group.Id).ToList();
+            }
 
             return groups;
         }
-        public List<Fixture> GetLeagueFixtures(League currentLeague)
+
+        public void GenerateLeague(LeagueModel model, string userId)
         {
-            return this.data.Fixtures.Where(x => x.LeagueId == currentLeague.Id).ToList();
+            var newLeague = new League
+            {
+                AppUserId = userId,
+                Name = model.LeagueName,
+                Participants = model.Participants
+            };
+            this.data.Leagues.Add(newLeague);
+
+            var groupNum = 0;
+
+            foreach (var group in model.Groups)
+            {
+                groupNum++;
+
+                var newGroup = new Group
+                {
+                    AppUserId = userId,
+                    LeagueId = newLeague.Id,
+                    League = newLeague,
+                    Name = groupNum.ToString(),
+                    TeamsCount = model.TeamsPerGroup,
+                };
+                this.data.Groups.Add(group);
+            }
+            this.data.SaveChanges();
         }
     }
 }

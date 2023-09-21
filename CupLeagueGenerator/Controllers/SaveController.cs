@@ -48,21 +48,21 @@
             cupService.DeleteCup(id);
             return RedirectToAction("Saves");
         }
-        public IActionResult LoadLeague(int id)
-        {
-            var currentLeague = leagueService.GetCurrentLeague(id);
-            var groups = leagueService.GetLeagueGroups(currentLeague);
-            var fixtures = leagueService.GetLeagueFixtures(currentLeague);
-            var model = new LeagueModel
-            {
-                LeagueName = currentLeague.Name,
-                Fixtures = fixtures,
-                Groups = groups,
-                NumberOfTeams = currentLeague.TeamsCount,
-                Id = currentLeague.Id
-            };
-            return RedirectToAction("LeagueFixtures", "League", model);
-        }
+      //  public IActionResult LoadLeague(int id)
+      //  {
+      //      var currentLeague = leagueService.GetCurrentLeague(id);
+      //      var groups = leagueService.GetLeagueGroups(currentLeague);
+      //      var fixtures = leagueService.GetLeagueFixtures(currentLeague);
+      //      var model = new LeagueModel
+      //      {
+      //          LeagueName = currentLeague.Name,
+      //          Fixtures = fixtures,
+      //          Groups = groups,
+      //          NumberOfTeams = currentLeague.TeamsCount,
+      //          Id = currentLeague.Id
+      //      };
+      //      return RedirectToAction("LeagueFixtures", "League", model);
+      //  }
         public IActionResult DeleteLeague(int id)
         {
             leagueService.DeleteLeague(id);

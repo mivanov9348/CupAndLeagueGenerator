@@ -26,14 +26,14 @@
             var fixtures = new List<Fixture>();
             var participants = this.data.Participants.Where(x => x.CupId == currentCup.Id).ToList();
             var matches = participants.Count() / 2;
-
+        
             for (int i = 0; i < matches; i++)
             {
                 var homeTeam = participants[rnd.Next(0, participants.Count)];
                 participants.Remove(homeTeam);
                 var awayTeam = participants[rnd.Next(0, participants.Count)];
                 participants.Remove(awayTeam);
-
+        
                 var newFixt = new Fixture
                 {
                     AppUserId = currentCup.AppUserId,
@@ -49,7 +49,7 @@
             this.data.SaveChanges();
         }
 
-        public void GenerateLeagueFixtures()
+             public void GenerateLeagueFixtures()
         {
             throw new NotImplementedException();
         }

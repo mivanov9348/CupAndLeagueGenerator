@@ -2,51 +2,54 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers;
 @model LeagueModel
 
-<head>
-    <link rel="stylesheet" href="~/css/LeagueIndex.css" />
-</head>
 
+<style>
+    body{
+        text-align: center;
+    }
+    .newLeagueBtn {
+        justify-content:center;
+        text-align: center;
+    }
+</style>
 <body>
+    <form method="post">
+        <h1 style="text-align:center">Leagues</h1>
+        <input class="newLeagueBtn" style="text-align:center" type="submit" asp-action="GenerateLeague" value="Create New League" />
+        <hr />
+    </form>
+    <form method="post">
 
-    <form class="form" method="post">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>N</th>
+                    <th>League Name</th>
+                    <th>Participants</th>
+                    <th colspan="2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var league in Model.Leagues)
+                {
+                    <tr>
+                        <td>1</td>
+                        <td>@league.Name</td>
+                        <td>
+                            @league.Participants.Count()
+                        </td>
+                        <td>
+                            <button asp-controller="League" asp-action="OpenLeague" asp-route-cupId="@league.Id">Open</button>
+                            <button asp-controller="League" asp-action="DeleteLeague" asp-route-cupId="@league.Id">Delete</button>
+                        </td>
+                    </tr>
 
-        <div class="title">
-            <h1>Create League</h1>
-            <hr style="color:black" />
-        </div>
-        <p style="color:darkred;margin-left:120px;font-size:16px">@TempData["error"]</p>
-        <div class="form-group">
-            <label for="exampleFormControlInput1">League Name</label>
-            <input type="text" asp-for="@Model.LeagueName" class="form-control" id="exampleFormControlInput1" required=true>
-        </div>
-
-        <div class="form-group">
-            <label for="exampleFormControlSelect1">Number of Teams</label>
-            <select asp-for="@Model.NumberOfTeams" class="form-control" id="exampleFormControlSelect1">
-                <option>4</option>
-                <option>8</option>
-                <option>16</option>
-                <option>32</option>
-                <option>64</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="exampleFormControlSelect1">Teams per group</label>
-            <select asp-for="@Model.TeamsPerGroup" class="form-control" id="exampleFormControlSelect1">               
-                <option>2</option>
-                <option>4</option>
-                <option>8</option>
-                <option>16</option>
-                <option>32</option>
-                <option>64</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <input class="Button" type="submit" asp-action="TeamsInput" asp-controller="League" value="Create" />
-        </div>
-
+                }
+            </tbody>
+        </table>
     </form>
 
+
+
 </body>
+
