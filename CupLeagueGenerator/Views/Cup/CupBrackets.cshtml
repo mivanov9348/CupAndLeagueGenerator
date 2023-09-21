@@ -1,0 +1,80 @@
+﻿@using CupLeagueGenerator.Infrastructure.Models;
+@model CupViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament Bracket</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    /* styles.css */
+    .tournament-bracket {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .round {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .match {
+        display: flex;
+        justify-content: space-between;
+        width: 300px; /* Adjust the width as needed */
+        margin: 10px;
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+
+    .team {
+        flex: 1;
+        text-align: center;
+        background-color: #f0f0f0;
+        padding: 5px;
+    }
+
+    /* Style for the final match */
+    .round:last-child .match {
+        justify-content: center;
+    }
+
+</style>
+<body>
+    <div class="tournament-bracket">
+
+        @for (int i = 1; i <= Model.CupRounds; i++)
+        {
+            <h1>Round @i</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Match Number</th>
+                        <th>Home Team</th>
+                        <th>Away Team</th>
+                        <th>Home Team Goals</th>
+                        <th>Away Team Goals</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var match in Model.CupFixtures.Where(x=>x.Round==i))
+                    {
+                        <tr>
+                            <td>1</td>
+                            <td>@(match.HomeParticipant != null ? match.HomeParticipant.Name : "NO")</td>
+                            <td>@(match.AwayParticipant != null ? match.AwayParticipant.Name : "NO")</td>
+                            <td>@(match.HomeParticipantScore)</td>
+                            <td>@(match.AwayParticipantScore)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</body>
+</html>

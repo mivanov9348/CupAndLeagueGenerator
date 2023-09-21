@@ -52,6 +52,8 @@
 <body>
     <form method="post">
         <h1 class="title">@Model.CupName</h1>
+        <a asp-action="CupBrackets" asp-route-cupId="@Model.CupId">Cup Brackets</a>
+
         <hr />
         <div class="participants-container">
             @foreach (var participant in @Model.CupParticipants)

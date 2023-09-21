@@ -1,6 +1,7 @@
 ﻿namespace CupLeagueGenerator.Controllers
 {
     using CupLeagueGenerator.Core.Services.Cup;
+    using CupLeagueGenerator.Core.Services.Fixture;
     using CupLeagueGenerator.Core.Services.Participant;
     using CupLeagueGenerator.Infrastructure.Models;
     using Microsoft.AspNetCore.Mvc;
@@ -9,12 +10,14 @@
     {
         private readonly ICupService cupService;
         private readonly IParticipantService participantService;
+        private readonly IFixtureService fixtureService;
 
         private string userId;
-        public CupController(ICupService cupService, IParticipantService participantService)
+        public CupController(ICupService cupService, IParticipantService participantService, IFixtureService fixtureService)
         {
             this.cupService = cupService;
             this.participantService = participantService;
+            this.fixtureService = fixtureService;
         }
         public IActionResult Index()
         {
@@ -50,29 +53,26 @@
         }
         public IActionResult SaveCup(CupModel model)
         {
-            GetUserId();
+            GetUserId();            
             var currentCup = cupService.SaveCup(model, userId);
             participantService.SaveCupParticipants(currentCup, model, userId);
+            fixtureService.CalculateRounds(currentCup);
             return RedirectToAction("Index");
         }
+        public IActionResult CupBrackets(int cupId)
+        {
+            var currentCup = cupService.GetCurrentCup(cupId);   
+         
+            return View(new CupViewModel
+            {
+                CupFixtures = currentCup.Fixtures,
+                CupId = currentCup.Id,
+                CupName = currentCup.Name,
+                CupParticipants = currentCup.Participants,
+                CupRounds = currentCup.Rounds
+            });
+        }
 
-        // public IActionResult CupFixtures(CupModel model)
-        // {
-        //     var userId = GetUserId();
-        //     var currentCup = cupService.GetCurrentCup(model.Id);
-        //
-        //     if (model.Fixtures != null)
-        //     {              
-        //         model.Fixtures = cupService.GetCupFixtures(currentCup);
-        //         return View(model);
-        //     }
-        //     
-        //     var fixtures = cupService.GenerateCupFixtures(model, userId);
-        //     model.Matches = fixtures.Count();
-        //     model.Fixtures = fixtures;
-        //
-        //     return View(model);
-        // }
         private string GetUserId()
         {
             if (User.Identity.IsAuthenticated)

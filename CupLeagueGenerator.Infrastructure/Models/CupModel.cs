@@ -13,6 +13,7 @@
         public string CupName { get; set; }
         public int CupParticipants { get; set; }
         public int Matches { get; set; }
+        public int Rounds { get; set; }
         public List<string> InputParticipants { get; set; }
         public List<Participant> Participants { get; set; }
 

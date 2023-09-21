@@ -12,6 +12,15 @@
             this.data = data;
             this.rnd = new Random();
         }
+
+        public int CalculateRounds(Cup CurrentCup)
+        {            
+            var rounds = (int)Math.Ceiling(Math.Log(CurrentCup.Participants.Count(), 2));
+            CurrentCup.Rounds= rounds;
+            this.data.SaveChanges();
+            return rounds;
+        }
+
         public void GenerateCupFixtures(Cup currentCup)
         {
             var fixtures = new List<Fixture>();
