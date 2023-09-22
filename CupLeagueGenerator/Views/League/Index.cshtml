@@ -26,7 +26,7 @@
                     <th>N</th>
                     <th>League Name</th>
                     <th>Participants</th>
-                    <th colspan="2">Action</th>
+                    <th colspan=3>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,6 +39,7 @@
                             @league.Participants.Count()
                         </td>
                         <td>
+                            <button asp-controller="League" asp-action="AddTeams" asp-route-cupId="@league.Id">Add Teams</button>
                             <button asp-controller="League" asp-action="OpenLeague" asp-route-cupId="@league.Id">Open</button>
                             <button asp-controller="League" asp-action="DeleteLeague" asp-route-cupId="@league.Id">Delete</button>
                         </td>

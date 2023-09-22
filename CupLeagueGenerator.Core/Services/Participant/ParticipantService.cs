@@ -31,5 +31,21 @@
             }
             this.data.SaveChanges();
         }
+
+        public void SaveLeagueParticipants(League currentLeague, string userId)
+        {
+           //foreach (var participants in currentLeague.TeamsCount)
+           //{
+           //    var newParticipant = new Participant
+           //    {
+           //        Name = participants.Name,
+           //        LeagueId = currentLeague.Id,
+           //        AppUserId = userId
+           //    };
+           //    this.data.Participants.Add(newParticipant);
+           //    currentLeague.Participants.Add(newParticipant);
+           //}
+           //this.data.SaveChanges();
+        }
     }
 }

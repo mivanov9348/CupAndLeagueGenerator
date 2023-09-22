@@ -47,15 +47,10 @@
             <hr class="line">
             @if (!SignInManager.IsSignedIn(User))
             {
-
                 <input type=submit asp-action="Index" asp-controller="Cup" value="Cup">
                 <hr class="line">
                 <input type=submit asp-action="Index" asp-controller="League" value="League">
                 <hr class="line">
-                <input type=submit value="Draw Random Participants">
-                <hr class="line">
-                <input type=submit value="Generate Fixtures">
-
             }
             else
             {

@@ -14,18 +14,7 @@
             this.rnd = new Random();
             this.data = data;
         }
-        public League CreateLeague(LeagueModel model, string userId)
-        {
-            var newLeague = new League
-            {
-                Name = model.LeagueName,
-                AppUserId = userId,
-                TeamsCount = model.NumberOfTeams
-            };
-            this.data.Leagues.Add(newLeague);
-            this.data.SaveChanges();
-            return newLeague;
-        }
+
         public List<Group> GenerateGroups(LeagueModel model, string userId)
         {
             var groups = model.NumberOfTeams / model.TeamsPerGroup;
@@ -142,8 +131,12 @@
         }
         public List<League> GetUsersLeagues(string userId)
         {
-            var currentLeagues = this.data.Leagues.Where(x => x.AppUserId == userId).Include(x => x.Participants).ToList();
-            return currentLeagues;
+
+            if (userId != null)
+            {
+                return this.data.Leagues.Where(x => x.AppUserId == userId).Include(x => x.Participants).ToList();
+            }
+            return this.data.Leagues.Include(x => x.Participants).ToList();
         }
         public void DeleteLeague(int id)
         {
@@ -175,7 +168,7 @@
             return groups;
         }
 
-        public void GenerateLeague(LeagueModel model, string userId)
+        public League GenerateLeague(LeagueModel model, string userId)
         {
             var newLeague = new League
             {
@@ -184,6 +177,7 @@
                 Participants = model.Participants
             };
             this.data.Leagues.Add(newLeague);
+            this.data.SaveChanges();
 
             var groupNum = 0;
 
@@ -200,8 +194,11 @@
                     TeamsCount = model.TeamsPerGroup,
                 };
                 this.data.Groups.Add(group);
+                newLeague.Groups.Add(group);
             }
+            
             this.data.SaveChanges();
+            return newLeague;
         }
     }
 }

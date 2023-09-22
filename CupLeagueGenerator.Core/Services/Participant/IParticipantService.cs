@@ -5,6 +5,7 @@
 
     public interface IParticipantService
     {
+        void SaveLeagueParticipants(League currentLeague, string userId);
         void SaveCupParticipants(Cup currentCup,CupModel model, string userId);
     }
 }

@@ -1,65 +1,53 @@
 ﻿namespace CupLeagueGenerator.Controllers
 {
     using CupLeagueGenerator.Core.Services.League;
+    using CupLeagueGenerator.Core.Services.Participant;
     using CupLeagueGenerator.Infrastructure.Models;
     using Microsoft.AspNetCore.Mvc;
     using System.Security.Claims;
     public class LeagueController : Controller
     {
         private readonly ILeagueService leagueService;
-        public LeagueController(ILeagueService leagueService)
+        private readonly IParticipantService participantService;
+        public LeagueController(ILeagueService leagueService, IParticipantService participantService)
         {
             this.leagueService = leagueService;
+            this.participantService = participantService;
         }
         public IActionResult Index()
         {
             var userId = GetUserId();
+            var leagues = leagueService.GetUsersLeagues(userId);
             return View(new LeagueModel
             {
-                Leagues = leagueService.GetUsersLeagues(userId)
+                Leagues = leagues
             });
         }
         public IActionResult GenerateLeague()
         {
-            return View();
+            return View(new LeagueModel());
         }
-        public IActionResult TeamsInput(LeagueModel model)
+
+        public IActionResult SaveLeague(LeagueModel model)
         {
             var userId = GetUserId();
-            (string, bool) IsTeamsValid = leagueService.IsTeamsValid(model);
-
-            if (IsTeamsValid.Item2 == false)
-            {
-                TempData["error"] = IsTeamsValid.Item1;
-                return View("Index", model);
-            }
             leagueService.GenerateLeague(model, userId);
-
-            return RedirectToAction("Index");
+            return View("Index");
         }
 
-        // public IActionResult LeagueFixtures(LeagueModel model)
-        // {
-        //     var userId = GetUserId();
-        //     var currentLeague = leagueService.GetCurrentLeague(model.Id);
-        //
-        //     if (currentLeague == null)
-        //     {
-        //         model.Id = leagueService.CreateLeague(model, userId).Id;
-        //         model.Groups = leagueService.GenerateGroups(model, userId);
-        //         model.Groups = leagueService.FillTeamsInGroups(model, userId);
-        //         model.Fixtures = leagueService.GetFixtures(model, userId);
-        //         return View("LeagueFixtures", model);
-        //     }
-        //     else
-        //     {
-        //         model.Fixtures = leagueService.GetLeagueFixtures(currentLeague);
-        //         model.Groups = leagueService.GetLeagueGroups(currentLeague);
-        //         return View("LeagueFixtures", model);
-        //     }                     
-        //            
-        // }
+        public IActionResult TeamsInput()
+        {
+            return View(new LeagueModel { });
+        }
 
+        public IActionResult AddTeams(int leagueId)
+        {
+            var userId = GetUserId();
+            var league = this.leagueService.GetCurrentLeague(leagueId);
+            participantService.SaveLeagueParticipants(league, userId);
+
+            return RedirectToAction();
+        }
         private string GetUserId()
         {
             if (User.Identity.IsAuthenticated)
