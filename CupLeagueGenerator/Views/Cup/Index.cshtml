@@ -8,9 +8,41 @@
 </head>
 
 <body>
+    <form method="post">
+        <h1 style="text-align:center">Cups</h1>
+        <input class="newLeagueBtn" style="text-align:center" type="submit" asp-action="GenerateCup" value="Create New Cup" />
+        <hr />
+    </form>
+    <form method="post">
 
-    <h1>dasdasd</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>N</th>
+                    <th>Cup Name</th>
+                    <th>Participants</th>
+                    <th colspan=3>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cup in Model.UserCups)
+                {
+                    <tr>
+                        <td>1</td>
+                        <td>@cup.Name</td>
+                        <td>
+                            @cup.Participants.Count()
+                        </td>
+                        <td>
+                            <button asp-controller="Cup" asp-action="OpenCup" asp-route-cupId="@cup.Id">Open</button>
+                            <button asp-controller="Cup" asp-action="DeleteCup" asp-route-cupId="@cup.Id">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+
 
 
 </body>
-

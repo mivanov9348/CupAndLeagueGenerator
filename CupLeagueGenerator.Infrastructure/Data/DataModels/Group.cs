@@ -10,7 +10,7 @@
         public ApplicationUser User { get; set; }
         public int LeagueId { get; set; }
         public League League { get; set; }
-        public int DrawId { get; set; }
+        public int? DrawId { get; set; }
         public Draw Draw { get; set; }
         public List<Participant> Participants { get; set; } = new List<Participant>();
         public List<Fixture> Fixtures { get; set; } = new List<Fixture>();

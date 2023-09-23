@@ -1,10 +1,15 @@
 ﻿namespace CupLeagueGenerator.Controllers
 {
+    using CupLeagueGenerator.Core.Services.Cup;
     using CupLeagueGenerator.Core.Services.League;
     using CupLeagueGenerator.Core.Services.Participant;
+    using CupLeagueGenerator.Infrastructure.Data.DataModels;
     using CupLeagueGenerator.Infrastructure.Models;
     using Microsoft.AspNetCore.Mvc;
+    using System;
     using System.Security.Claims;
+    using System.Text.RegularExpressions;
+
     public class LeagueController : Controller
     {
         private readonly ILeagueService leagueService;
@@ -27,27 +32,74 @@
         {
             return View(new LeagueModel());
         }
-
         public IActionResult SaveLeague(LeagueModel model)
         {
             var userId = GetUserId();
-            leagueService.GenerateLeague(model, userId);
-            return View("Index");
+            var league = leagueService.GenerateLeague(model, userId);
+            leagueService.GenerateGroups(league, model, userId);
+            return RedirectToAction("Index");
         }
-
-        public IActionResult TeamsInput()
+        public IActionResult OpenLeague(int leagueId)
         {
-            return View(new LeagueModel { });
-        }
+            var currentLeague = leagueService.GetCurrentLeague(leagueId);
+            var groups = currentLeague.Groups;
+            var participants = participantService.GetLeagueParticipants(leagueId);
+            var teamsPerGroup = groups.First().TeamsCount;
 
-        public IActionResult AddTeams(int leagueId)
+            return View("LeaguePreview", new LeagueViewModel
+            {
+                LeagueId = currentLeague.Id,
+                LeagueName = currentLeague.Name,
+                Groups = groups,
+                LeagueParticipants = participants,
+                TeamsPerGroup = teamsPerGroup,
+
+            });
+        }
+        public IActionResult DeleteLeague(int leagueId)
+        {
+            var league = leagueService.GetCurrentLeague(leagueId);
+            leagueService.DeleteLeague(league);
+            return RedirectToAction("Index");
+        }
+        public IActionResult TeamsInput(int leagueId)
+        {
+            var league = this.leagueService.GetCurrentLeague(leagueId);
+
+            return View(new LeagueModel
+            {
+                LeagueId = leagueId,
+                NumberOfTeams = league.ParticipantsCount
+            });
+        }
+        public IActionResult AddTeams(LeagueModel model)
         {
             var userId = GetUserId();
-            var league = this.leagueService.GetCurrentLeague(leagueId);
-            participantService.SaveLeagueParticipants(league, userId);
-
-            return RedirectToAction();
+            var league = this.leagueService.GetCurrentLeague(model.LeagueId);
+            participantService.DeleteCurrentLeagueParticipants(league);
+            participantService.SaveLeagueParticipants(league, model, userId);
+            return RedirectToAction("Index");
         }
+        public IActionResult DrawGroups(int leagueId)
+        {
+            var league = leagueService.GetCurrentLeague(leagueId);
+            leagueService.DeleteGroupParticipants(league);
+            leagueService.DrawGroups(league);
+            var groups = league.Groups;
+            var participants = participantService.GetLeagueParticipants(leagueId);
+            var teamsPerGroup = groups.First().TeamsCount;
+
+            return View("LeaguePreview", new LeagueViewModel
+            {
+                LeagueId = league.Id,
+                LeagueName = league.Name,
+                Groups = groups,
+                LeagueParticipants = participants,
+                TeamsPerGroup = teamsPerGroup,
+
+            });
+        }
+
         private string GetUserId()
         {
             if (User.Identity.IsAuthenticated)

@@ -19,7 +19,7 @@
         {
             <div class="form-group">
                 <label for="exampleFormControlInput1">Team @i</label>
-                <input asp-for="@Model.Participants" type="text" class="form-control" required="true" id="exampleFormControlInput1">
+                <input asp-for="@Model.InputParticipants" type="text" class="form-control" required="true" id="exampleFormControlInput1" value="Team @i">
             </div>
         }
 
@@ -28,7 +28,7 @@
             <input type="hidden" asp-for="@Model.LeagueName" />
             <input type="hidden" asp-for="@Model.NumberOfTeams" />
             <input type="hidden" asp-for="@Model.TeamsPerGroup" />
-            <input class="Button" asp-controller="League" asp-action="LeagueFixtures" type="submit" value="Create" />
+            <input class="Button" asp-controller="League" asp-action="AddTeams" type="submit" value="Create" asp-route-leagueId="@Model.LeagueId" />
         </div>
 
     </form>

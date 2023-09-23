@@ -25,6 +25,7 @@
             return View(new CupModel
             {
                 UserCups = cupService.GetUserCups(userId)
+                
             });
         }
         public IActionResult GenerateCup()

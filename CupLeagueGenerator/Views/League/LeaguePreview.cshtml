@@ -1,0 +1,100 @@
+﻿@using CupLeagueGenerator.Infrastructure.Models;
+@model LeagueViewModel
+
+<style>
+
+    body {
+        text-align: center;
+    }
+
+    .title {
+        text-align: center;
+    }
+
+    .participant {
+        text-align: center;
+        display: inline-block;
+        width: 12.5%;
+        text-align: center;
+        margin: 0;
+        padding: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .participants-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    /* Style for the table */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .GenerateFixtures:hover {
+        color: firebrick;
+        font-weight: bolder;
+    }
+
+</style>
+
+<body>
+    <form method="post">
+        <h1 class="title">@Model.LeagueName</h1>
+
+        <hr />
+        <div class="participants-container">
+            @foreach (var participant in @Model.LeagueParticipants)
+            {
+                <div class="participant">@participant.Name</div>
+            }
+        </div>
+        <hr />
+        <input type="submit" value="Draw Groups" asp-action="DrawGroups" asp-controller="League" asp-route-leagueId="@Model.LeagueId" />
+        <hr />
+        <table class="groups-table">
+            <thead>
+
+            <tbody>
+                    @foreach (var group in Model.Groups)
+                    {
+                    <tr>
+                        <td colspan="3" class="group-name">Group: @group.Name</td>
+                    </tr>
+                    <tr>
+
+                        <th>Order</th>
+                        <th>Team Name</th>
+                    </tr>
+                        @for (var i = 0; i < group.Participants.Count; i++)
+                        {
+                        <tr>
+                            <td>@(i + 1)</td>
+                            <td>@group.Participants[i].Name</td>
+                        </tr>
+                        }
+                    }
+            </tbody>
+        </table>
+
+
+
+        <hr />
+        <input class="GenerateFixtures" type="submit" value="Generate Group Fixtures" asp-controller="Fixture" asp-action="GenerateCupFixtures" asp-route-cupId="@Model.LeagueId" />
+        <hr />
+
+
+    </form>
+</body>
