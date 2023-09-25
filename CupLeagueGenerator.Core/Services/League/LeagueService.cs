@@ -15,10 +15,18 @@
             this.rnd = new Random();
             this.data = data;
         }
-
         public List<Group> GenerateGroups(League currentLeague, LeagueModel model, string userId)
         {
-            var groups = model.NumberOfTeams / model.TeamsPerGroup;
+            var groups = 0;
+            if (model.IsOneLeague)
+            {
+                groups = 1;
+            }
+            else
+            {
+                groups = model.NumberOfTeams / model.TeamsPerGroup;
+            }
+        
             var groupsList = new List<Group>();
             for (int i = 1; i <= groups; i++)
             {

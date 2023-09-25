@@ -5,8 +5,8 @@
     public interface IFixtureService
     {
         void GenerateCupFixtures(Cup currentCup);
-        void GenerateLeagueFixtures();
-        void RemoveCurrentFixtures(int cupId);
+        void GenerateLeagueFixtures(League currentLeague);
+        void RemoveCurrentFixtures(int competitionId);
         int CalculateRounds(Cup CurrentCup);
     }
 }

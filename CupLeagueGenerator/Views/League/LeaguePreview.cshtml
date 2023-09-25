@@ -89,12 +89,12 @@
             </tbody>
         </table>
 
-
-
         <hr />
-        <input class="GenerateFixtures" type="submit" value="Generate Group Fixtures" asp-controller="Fixture" asp-action="GenerateCupFixtures" asp-route-cupId="@Model.LeagueId" />
+        <input class="GenerateFixtures" type="submit" value="Generate Group Fixtures" asp-controller="Fixture" asp-action="GenerateLeagueFixtures" asp-route-leagueId="@Model.LeagueId" />
         <hr />
-
-
+        @foreach (var fixt in Model.LeagueFixtures)
+        {
+            <h1>@fixt.HomeParticipant.Name @fixt.AwayTeamName</h1>
+        }
     </form>
 </body>

@@ -53,7 +53,8 @@
                 Groups = groups,
                 LeagueParticipants = participants,
                 TeamsPerGroup = teamsPerGroup,
-
+                LeagueFixtures = currentLeague.Fixtures
+                
             });
         }
         public IActionResult DeleteLeague(int leagueId)
@@ -79,6 +80,16 @@
             participantService.DeleteCurrentLeagueParticipants(league);
             participantService.SaveLeagueParticipants(league, model, userId);
             return RedirectToAction("Index");
+        }
+
+        public IActionResult OneLeague()
+        {
+            var newLeagueModel = new LeagueModel
+            {
+                IsOneLeague = true
+            };
+
+            return View("GenerateLeague",newLeagueModel);
         }
         public IActionResult DrawGroups(int leagueId)
         {

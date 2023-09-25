@@ -7,6 +7,7 @@
         public string LeagueName { get; set; }
         public int NumberOfTeams { get; set; }
         public int TeamsPerGroup { get; set; }
+        public bool IsOneLeague { get; set; } = false;
         public List<string> InputParticipants { get; set; } = new List<string> { };
         public List<Participant> Participants { get; set; } = new List<Participant> { };
         public List<Fixture> Fixtures { get; set; } = new List<Fixture>();
