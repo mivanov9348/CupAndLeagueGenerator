@@ -8,5 +8,6 @@
         void GenerateLeagueFixtures(League currentLeague);
         void RemoveCurrentFixtures(int competitionId);
         int CalculateRounds(Cup CurrentCup);
+        List<Fixture> GetFixturesById(int competitionId);
     }
 }

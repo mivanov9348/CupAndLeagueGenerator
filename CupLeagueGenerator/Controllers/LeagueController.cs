@@ -1,6 +1,7 @@
 ﻿namespace CupLeagueGenerator.Controllers
 {
     using CupLeagueGenerator.Core.Services.Cup;
+    using CupLeagueGenerator.Core.Services.Fixture;
     using CupLeagueGenerator.Core.Services.League;
     using CupLeagueGenerator.Core.Services.Participant;
     using CupLeagueGenerator.Infrastructure.Data.DataModels;
@@ -13,11 +14,13 @@
     public class LeagueController : Controller
     {
         private readonly ILeagueService leagueService;
+        private readonly IFixtureService fixtureService;
         private readonly IParticipantService participantService;
-        public LeagueController(ILeagueService leagueService, IParticipantService participantService)
+        public LeagueController(ILeagueService leagueService, IParticipantService participantService, IFixtureService fixtureService)
         {
             this.leagueService = leagueService;
             this.participantService = participantService;
+            this.fixtureService = fixtureService;
         }
         public IActionResult Index()
         {
@@ -45,6 +48,7 @@
             var groups = currentLeague.Groups;
             var participants = participantService.GetLeagueParticipants(leagueId);
             var teamsPerGroup = groups.First().TeamsCount;
+            var fixtures = fixtureService.GetFixturesById(currentLeague.Id);
 
             return View("LeaguePreview", new LeagueViewModel
             {
@@ -53,8 +57,8 @@
                 Groups = groups,
                 LeagueParticipants = participants,
                 TeamsPerGroup = teamsPerGroup,
-                LeagueFixtures = currentLeague.Fixtures
-                
+                LeagueFixtures = fixtures
+
             });
         }
         public IActionResult DeleteLeague(int leagueId)

@@ -46,20 +46,7 @@
             this.data.SaveChanges();
             return groupsList;
         }
-        private void Shuffle(List<Participant> teams)
-        {
-            Random rnd = new Random();
-            int n = teams.Count;
-
-            for (int i = n - 1; i > 1; i--)
-            {
-                int random = rnd.Next(i + 1);
-
-                var value = teams[random];
-                teams[random] = teams[i];
-                teams[i] = value;
-            }
-        }
+     
         public List<League> GetUsersLeagues(string userId)
         {
 

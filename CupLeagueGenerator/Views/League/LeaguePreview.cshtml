@@ -64,37 +64,58 @@
         <hr />
         <input type="submit" value="Draw Groups" asp-action="DrawGroups" asp-controller="League" asp-route-leagueId="@Model.LeagueId" />
         <hr />
+        <!-- Existing code for groups -->
         <table class="groups-table">
             <thead>
-
+            </thead>
             <tbody>
-                    @foreach (var group in Model.Groups)
-                    {
+                @foreach (var group in Model.Groups)
+                {
                     <tr>
                         <td colspan="3" class="group-name">Group: @group.Name</td>
                     </tr>
                     <tr>
-
                         <th>Order</th>
                         <th>Team Name</th>
                     </tr>
-                        @for (var i = 0; i < group.Participants.Count; i++)
-                        {
+                    @for (var i = 0; i < group.Participants.Count; i++)
+                    {
                         <tr>
                             <td>@(i + 1)</td>
                             <td>@group.Participants[i].Name</td>
                         </tr>
-                        }
                     }
+
+                    <!-- Add a nested table for group fixtures -->
+                    <tr>
+                        <td colspan="3">
+                            <table class="group-fixtures-table">
+                                <thead>
+                                    <tr>
+                                        <th>Round</th>
+                                        <th>Home Team</th>
+                                        <th colspan="2">Score</th>
+                                        <th>Away Team</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var fixt in group.Fixtures)
+                                    {
+                                        <tr>
+                                            <td>@fixt.Round</td>
+                                            <td>@fixt.HomeTeamName</td>
+                                            <td>@fixt.HomeParticipantScore</td>
+                                            <td>@fixt.AwayParticipantScore</td>
+                                            <td>@fixt.AwayTeamName</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
 
-        <hr />
-        <input class="GenerateFixtures" type="submit" value="Generate Group Fixtures" asp-controller="Fixture" asp-action="GenerateLeagueFixtures" asp-route-leagueId="@Model.LeagueId" />
-        <hr />
-        @foreach (var fixt in Model.LeagueFixtures)
-        {
-            <h1>@fixt.HomeParticipant.Name @fixt.AwayTeamName</h1>
-        }
     </form>
 </body>
