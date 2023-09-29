@@ -38,18 +38,25 @@
         width: 300px;
         font-weight: bolder;
     }
+
+    .logout{
+        background-color:red;
+    }
 </style>
 
 <body>
     <form method="get">
-        <div class="container">
-            <h1>Menu</h1>
-            <hr class="line">
-            @if (!SignInManager.IsSignedIn(User))
+        <div class="container">          
+      
+            @if (SignInManager.IsSignedIn(User))
             {
-                <input type=submit asp-action="Index" asp-controller="Cup" value="Cup">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
                 <hr class="line">
+                <input type=submit asp-action="Index" asp-controller="Cup" value="Cup">
+             
                 <input type=submit asp-action="Index" asp-controller="League" value="League">
+                <hr class="line">
+                <input type=submit class="logout" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" value="Logout">
                 <hr class="line">
             }
             else

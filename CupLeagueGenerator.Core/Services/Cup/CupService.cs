@@ -17,11 +17,8 @@
         }
         public List<Cup> GetUserCups(string userId)
         {
-            if (userId != null)
-            {
-                return this.data.Cups.Where(x => x.AppUserId == userId).Include(x => x.Participants).ToList();
-            }
-            return this.data.Cups.Include(x => x.Participants).ToList();
+           
+            return this.data.Cups.Where(x=>x.AppUserId==userId).Include(x => x.Participants).ToList();
         }
         public Cup GetCurrentCup(int id)
         {
@@ -50,7 +47,7 @@
                 Name = model.CupName,
                 Participants = model.Participants,
                 AppUserId = userId,
-                Rounds = 0
+                Rounds = 0                
             };
             this.data.Cups.Add(newCup);
             this.data.SaveChanges();
